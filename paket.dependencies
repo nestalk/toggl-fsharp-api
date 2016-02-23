@@ -1,0 +1,8 @@
+source https://nuget.org/api/v2
+
+nuget FAKE
+nuget Suave
+nuget FSharp.Data
+nuget NodaTime
+nuget Newtonsoft.Json
+nuget NodaTime.Serialization.JsonNet
