@@ -67,12 +67,26 @@ let report =
             createJsonResponse report
     )
 
+let setCORSHeaders =
+    setHeader  "Access-Control-Allow-Origin" "*"
+    >=> setHeader "Access-Control-Allow-Headers" "content-type"
+
+let allow_cors : WebPart =
+    choose [
+        OPTIONS >=>
+            fun context ->
+                context |> (
+                    setCORSHeaders
+                    >=> OK "CORS approved" )
+    ]
+
 let serverConfig = 
     let port = getBuildParamOrDefault "port" "8083" |> Sockets.Port.Parse
     { defaultConfig with bindings = [ HttpBinding.mk HTTP IPAddress.Loopback port ] }
 
 let webPart = 
     choose [
+        allow_cors
         path "/" >=> report
     ]
 
