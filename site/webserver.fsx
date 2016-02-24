@@ -65,8 +65,8 @@ let report =
             | Choice2Of2 _ -> None
 
         match (date, token) with
-        | (None,_) -> BAD_REQUEST "No Date Specified!"
-        | (_, None) -> BAD_REQUEST "No Token Specified!"
+        | (None,_) -> setCORSHeaders >=> BAD_REQUEST "No Date Specified!"
+        | (_, None) -> setCORSHeaders >=> BAD_REQUEST "No Token Specified!"
         | (Some(dateValue), Some(tokenValue)) -> 
             let report = generateReport workHours tokenValue dateValue
 
