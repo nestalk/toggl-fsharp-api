@@ -37,8 +37,14 @@ let private formatting =
     settings.DateParseHandling <- DateParseHandling.None
     settings.ConfigureForNodaTime(provider);
 
+let setCORSHeaders =
+    setHeader  "Access-Control-Allow-Origin" "*"
+    >=> setHeader "Access-Control-Allow-Headers" "content-type"
+
 let private createJsonResponse report =
-     setMimeType "application/json" >=> OK (JsonConvert.SerializeObject(report, formatting))
+     setMimeType "application/json" 
+     >=> setCORSHeaders 
+     >=> OK (JsonConvert.SerializeObject(report, formatting))
 
 let report =
     request (fun r ->
@@ -66,10 +72,6 @@ let report =
 
             createJsonResponse report
     )
-
-let setCORSHeaders =
-    setHeader  "Access-Control-Allow-Origin" "*"
-    >=> setHeader "Access-Control-Allow-Headers" "content-type"
 
 let allow_cors : WebPart =
     choose [
